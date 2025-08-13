@@ -1,69 +1,30 @@
-# React + TypeScript + Vite
+🛠️ AI Toolbox for Dad ❤️
+This is a personal project I’m building for my father to help him keep up with the latest AI tools and make his life easier.
+The app will serve as a simple, friendly AI toolbox gathering useful AI applications in one place so he can explore, learn, and use them without getting lost in the tech world.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Since my dad speaks French, the primary language of the app will be French 🇫🇷.
 
-Currently, two official plugins are available:
+It’s a small gift of love, built with code.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+✨ Features
+🗂️ Curated list of AI tools across multiple categories
 
-## Expanding the ESLint configuration
+🌐 Simple, intuitive interface in French
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+🔍 Search and filter to quickly find relevant tools
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+📱 Mobile-first responsive design
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+📌 Saved favorites for quick access
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+🛠 Tech Stack
+Frontend: React.js + TailwindCSS
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Backend: Node.js + Express
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Database: MongoDB
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Hosting: TBD (Likely Vercel / Render)
+
+Other: REST API integration for tool data
+
