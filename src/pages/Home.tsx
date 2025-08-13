@@ -1,96 +1,62 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import SearchBar from "../components/SearchBar";
 import ToolCard from "../components/ToolCard";
 import CategoryFilter from "../components/CategoryFilter";
-import Pagination from "../components/Pagination";
 
 export default function Home() {
-  const initialTools = [
-    { name: "ChatGPT", description: "AI chatbot by OpenAI", category: "Chatbot", link: "#" },
-    { name: "MidJourney", description: "AI image generator", category: "Image", link: "#" },
-  ];
-
-  const [tools, setTools] = useState(initialTools);
-  const [filteredTools, setFilteredTools] = useState(initialTools);
-  const [currentPage, setCurrentPage] = useState(1);
-  const toolsPerPage = 6;
-
-  // Sync filteredTools when tools list changes
-  useEffect(() => {
-    setFilteredTools(tools);
-  }, [tools]);
+  const [tools] = useState([
+    { name: "ChatGPT", description: "Chatbot IA par OpenAI", category: "Chatbot", link: "#" },
+    { name: "MidJourney", description: "Générateur d'images IA", category: "Image", link: "#" },
+    { name: "Gamma", description: "Créateur de présentations IA", category: "Productivité", link: "#" },
+  ]);
+  const [filteredTools, setFilteredTools] = useState(tools);
 
   const handleSearch = (query: string) => {
-    const results = tools.filter(t => 
-      t.name.toLowerCase().includes(query.toLowerCase())
-    );
-    setFilteredTools(results);
-    setCurrentPage(1);
+    setFilteredTools(tools.filter(t => t.name.toLowerCase().includes(query.toLowerCase())));
   };
 
   const handleCategorySelect = (cat: string) => {
-    if (cat === "All") {
-      setFilteredTools(tools);
-    } else {
-      setFilteredTools(tools.filter(t => t.category === cat));
-    }
-    setCurrentPage(1);
-  };
-
-  // Pagination logic
-  const startIndex = (currentPage - 1) * toolsPerPage;
-  const currentTools = filteredTools.slice(startIndex, startIndex + toolsPerPage);
-  const totalPages = Math.ceil(filteredTools.length / toolsPerPage);
-
-  // Example: Adding a new tool dynamically
-  const addTool = () => {
-    const newTool = { 
-      name: "New Tool", 
-      description: "Example tool added dynamically", 
-      category: "Code", 
-      link: "#" 
-    };
-    setTools(prev => [...prev, newTool]);
+    if (cat === "Tous") setFilteredTools(tools);
+    else setFilteredTools(tools.filter(t => t.category === cat));
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div className="bg-gray-900 min-h-screen text-white px-6 py-8">
+      {/* Hero Section */}
+      <section className="max-w-5xl mx-auto text-center py-12">
+        <h1 className="text-4xl md:text-5xl font-bold mb-4">
+          La boîte à outils IA de Papa
+        </h1>
+        <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+          Une collection des meilleurs outils IA pour rendre ta vie plus facile et plus amusante.  
+          Découvre, explore et utilise les dernières innovations en un clic.
+        </p>
+      </section>
+
+      {/* Search Bar */}
+      <div className="max-w-3xl mx-auto mb-8">
         <SearchBar onSearch={handleSearch} />
-        <button 
-          onClick={addTool} 
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-        >
-          + Add Tool
-        </button>
       </div>
 
-      <div className="mt-4">
-        <CategoryFilter 
-          categories={["All", "Chatbot", "Image", "Video", "Code"]} 
-          onSelect={handleCategorySelect} 
+      {/* Category Filter */}
+      <div className="flex flex-wrap justify-center gap-3 mb-10">
+        <CategoryFilter
+          categories={["Tous", "Chatbot", "Image", "Productivité"]}
+          onSelect={handleCategorySelect}
         />
       </div>
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-        {currentTools.length > 0 ? (
-          currentTools.map((tool, index) => (
-            <ToolCard key={index} {...tool} />
-          ))
-        ) : (
-          <p className="col-span-full text-center text-gray-500">
-            No tools found.
-          </p>
-        )}
+      {/* Tools Grid */}
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        {filteredTools.map((tool, index) => (
+          <div
+            key={index}
+            className="bg-gray-800 p-6 rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300"
+          >
+            <ToolCard {...tool} />
+          </div>
+        ))}
       </div>
-
-      {totalPages > 1 && (
-        <Pagination 
-          currentPage={currentPage} 
-          totalPages={totalPages} 
-          onPageChange={setCurrentPage} 
-        />
-      )}
     </div>
   );
 }
