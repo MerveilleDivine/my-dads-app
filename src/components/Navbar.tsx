@@ -7,11 +7,9 @@ export default function Navbar() {
         <Link to="/" className="text-lg font-black tracking-tight text-slate-950 transition hover:text-amber-700 md:text-xl">
           Boîte IA de Papa
         </Link>
-        <div className="hidden items-center gap-6 text-sm font-bold text-slate-600 md:flex">
-          <a href="#outils" className="hover:text-amber-700">Outils</a>
-          <a href="#favoris" className="hover:text-amber-700">Favoris</a>
-          <a href="#guide" className="hover:text-amber-700">Guide</a>
-        </div>
+        <p className="hidden text-sm font-bold text-slate-500 md:block">
+          Des outils IA simples, en français, au même endroit.
+        </p>
       </div>
     </nav>
   );
