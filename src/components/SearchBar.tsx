@@ -1,32 +1,30 @@
-import { useState } from "react";
+import type { ChangeEvent } from "react";
 
 interface SearchBarProps {
+  value: string;
   onSearch: (query: string) => void;
 }
 
-export default function SearchBar({ onSearch }: SearchBarProps) {
-  const [value, setValue] = useState("");
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
-    onSearch(e.target.value);
+export default function SearchBar({ value, onSearch }: SearchBarProps) {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    onSearch(event.target.value);
   };
 
   return (
-    <div className="flex items-center bg-gray-800 rounded-full shadow-lg p-2 max-w-lg mx-auto">
-      <input
-        type="text"
-        value={value}
-        onChange={handleChange}
-        placeholder="Rechercher un outil IA..."
-        className="flex-1 bg-transparent outline-none text-white px-4 placeholder-gray-400"
-      />
-      <button
-        className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full transition-colors duration-300"
-        onClick={() => onSearch(value)}
-      >
-        🔍
-      </button>
-    </div>
+    <label className="block">
+      <span className="sr-only">Rechercher un outil IA</span>
+      <div className="flex items-center rounded-3xl border border-amber-200 bg-white/90 px-4 py-3 shadow-sm shadow-amber-100 focus-within:border-amber-500 focus-within:ring-4 focus-within:ring-amber-100">
+        <span aria-hidden="true" className="mr-3 text-2xl">
+          🔍
+        </span>
+        <input
+          type="search"
+          value={value}
+          onChange={handleChange}
+          placeholder="Rechercher : écrire, image, traduction, présentation..."
+          className="w-full bg-transparent text-lg text-slate-900 outline-none placeholder:text-slate-400"
+        />
+      </div>
+    </label>
   );
 }
