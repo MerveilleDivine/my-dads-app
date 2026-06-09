@@ -1,7 +1,7 @@
 {
   "name": "my-dads-app",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -21,7 +21,6 @@
     "@tailwindcss/vite": "^4.1.11",
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",
-    "@types/react-router-dom": "^5.3.3",
     "@vitejs/plugin-react": "^5.0.0",
     "autoprefixer": "^10.4.21",
     "eslint": "^9.33.0",
