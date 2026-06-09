@@ -1,20 +1,29 @@
 interface CategoryFilterProps {
-  categories: string[];
+  categories: readonly string[];
+  selectedCategory: string;
   onSelect: (category: string) => void;
 }
 
-export default function CategoryFilter({ categories, onSelect }: CategoryFilterProps) {
+export default function CategoryFilter({ categories, selectedCategory, onSelect }: CategoryFilterProps) {
   return (
-    <div className="flex flex-wrap gap-3">
-      {categories.map((cat) => (
-        <button
-          key={cat}
-          onClick={() => onSelect(cat)}
-          className="px-5 py-2 rounded-full bg-gray-800 text-gray-300 hover:bg-blue-500 hover:text-white transition-colors duration-300"
-        >
-          {cat}
-        </button>
-      ))}
+    <div className="flex gap-3 overflow-x-auto pb-2" aria-label="Catégories d’outils IA">
+      {categories.map((category) => {
+        const isSelected = category === selectedCategory;
+        return (
+          <button
+            key={category}
+            type="button"
+            onClick={() => onSelect(category)}
+            className={`shrink-0 rounded-full px-5 py-3 text-base font-semibold transition ${
+              isSelected
+                ? "bg-slate-950 text-white shadow-lg shadow-slate-300"
+                : "bg-white text-slate-700 shadow-sm ring-1 ring-slate-200 hover:bg-amber-50"
+            }`}
+          >
+            {category}
+          </button>
+        );
+      })}
     </div>
   );
 }
