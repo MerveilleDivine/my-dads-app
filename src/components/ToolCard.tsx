@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { AiTool } from "../data/tools";
 
 interface ToolCardProps {
@@ -7,6 +8,9 @@ interface ToolCardProps {
 }
 
 export default function ToolCard({ tool, isFavorite, onToggleFavorite }: ToolCardProps) {
+  const [isGuideOpen, setIsGuideOpen] = useState(false);
+  const guideId = `${tool.id}-guide`;
+
   return (
     <article className="flex h-full flex-col rounded-3xl border border-slate-200 bg-white p-5 shadow-sm shadow-slate-200 transition hover:-translate-y-1 hover:shadow-xl">
       <div className="mb-4 flex items-start justify-between gap-3">
@@ -17,7 +21,7 @@ export default function ToolCard({ tool, isFavorite, onToggleFavorite }: ToolCar
         <button
           type="button"
           onClick={() => onToggleFavorite(tool.id)}
-          className={isFavorite ? "rounded-full bg-amber-100 px-3 py-2 text-xl text-amber-700" : "rounded-full bg-slate-100 px-3 py-2 text-xl text-slate-500 hover:bg-amber-50"}
+          className={isFavorite ? "rounded-full bg-amber-100 px-3 py-2 text-sm font-bold text-amber-700" : "rounded-full bg-slate-100 px-3 py-2 text-sm font-bold text-slate-600 hover:bg-amber-50"}
         >
           {isFavorite ? "Favori" : "Garder"}
         </button>
@@ -45,6 +49,41 @@ export default function ToolCard({ tool, isFavorite, onToggleFavorite }: ToolCar
           {tool.isFree ? "Gratuit possible" : "Payant"}
         </span>
       </div>
+
+      <div className="mt-4 flex flex-wrap gap-2">
+        {tool.bestFor.map((item) => (
+          <span key={item} className="rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-600">
+            {item}
+          </span>
+        ))}
+      </div>
+
+      <button
+        type="button"
+        onClick={() => setIsGuideOpen((current) => !current)}
+        aria-expanded={isGuideOpen}
+        aria-controls={guideId}
+        className="mt-5 rounded-2xl border border-slate-200 px-4 py-3 text-left text-base font-bold text-slate-800 transition hover:border-amber-300 hover:bg-amber-50"
+      >
+        {isGuideOpen ? "Masquer le guide" : "Voir comment commencer"}
+      </button>
+
+      {isGuideOpen && (
+        <div id={guideId} className="mt-4 space-y-4 rounded-2xl border border-amber-100 bg-amber-50 p-4">
+          <div>
+            <p className="text-sm font-bold uppercase tracking-wide text-amber-700">Phrase à essayer</p>
+            <p className="mt-2 rounded-xl bg-white p-3 text-sm leading-6 text-slate-800">“{tool.starterPrompt}”</p>
+          </div>
+          <div>
+            <p className="text-sm font-bold uppercase tracking-wide text-amber-700">Conseil simple</p>
+            <p className="mt-1 text-sm leading-6 text-slate-700">{tool.beginnerTip}</p>
+          </div>
+          <div>
+            <p className="text-sm font-bold uppercase tracking-wide text-amber-700">À vérifier</p>
+            <p className="mt-1 text-sm leading-6 text-slate-700">{tool.caution}</p>
+          </div>
+        </div>
+      )}
 
       <a
         href={tool.link}
