@@ -2,15 +2,15 @@ import { Link } from "react-router-dom";
 
 export default function Navbar() {
   return (
-    <nav className="bg-gray-900 text-white shadow-lg">
-      <div className="max-w-7xl mx-auto px-4 flex items-center justify-between h-16">
-        <Link to="/" className="text-xl font-bold hover:text-blue-400 transition">
-          AI Tools Hub
+    <nav className="border-b border-amber-100 bg-white/90 text-slate-900 shadow-sm backdrop-blur">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5">
+        <Link to="/" className="text-lg font-black tracking-tight text-slate-950 transition hover:text-amber-700 md:text-xl">
+          Boîte IA de Papa
         </Link>
-        <div className="space-x-6 hidden md:flex">
-          <Link to="/" className="hover:text-blue-400">Home</Link>
-          <Link to="/about" className="hover:text-blue-400">About</Link>
-          <Link to="/contact" className="hover:text-blue-400">Contact</Link>
+        <div className="hidden items-center gap-6 text-sm font-bold text-slate-600 md:flex">
+          <a href="#outils" className="hover:text-amber-700">Outils</a>
+          <a href="#favoris" className="hover:text-amber-700">Favoris</a>
+          <a href="#guide" className="hover:text-amber-700">Guide</a>
         </div>
       </div>
     </nav>
