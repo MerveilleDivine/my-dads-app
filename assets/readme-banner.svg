@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300" viewBox="0 0 1200 300" role="img" aria-labelledby="title desc">
+  <title id="title">La boîte à outils IA de Papa</title>
+  <desc id="desc">Black and white banner for a French-first AI discovery guide.</desc>
+  <rect width="1200" height="300" rx="24" fill="#090909"/>
+  <path d="M0 252H1200M0 48H1200" stroke="#262626"/>
+  <text x="64" y="78" fill="#A3A3A3" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" letter-spacing="3">REACT · TYPESCRIPT · FRENCH-FIRST</text>
+  <text x="62" y="142" fill="#FAFAFA" font-family="Inter, Arial, sans-serif" font-size="46" font-weight="700" letter-spacing="-1">La boîte à outils IA de Papa</text>
+  <text x="64" y="184" fill="#BDBDBD" font-family="Inter, Arial, sans-serif" font-size="18">A calmer way for a first-time user to discover useful AI tools.</text>
+  <g fill="none" stroke="#737373" stroke-width="1">
+    <rect x="64" y="214" width="112" height="36" rx="18"/><rect x="188" y="214" width="126" height="36" rx="18"/>
+    <rect x="326" y="214" width="104" height="36" rx="18"/><rect x="442" y="214" width="126" height="36" rx="18"/>
+  </g>
+  <g fill="#D4D4D4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" text-anchor="middle">
+    <text x="120" y="237">ÉCRIRE</text><text x="251" y="237">APPRENDRE</text><text x="378" y="237">CRÉER</text><text x="505" y="237">ORGANISER</text>
+  </g>
+  <text x="1136" y="238" text-anchor="end" fill="#737373" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13">10 TOOLS · 7 CATEGORIES</text>
+</svg>
