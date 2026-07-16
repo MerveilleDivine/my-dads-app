@@ -1,17 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 import CategoryFilter from "../components/CategoryFilter";
 import SearchBar from "../components/SearchBar";
 import ToolCard from "../components/ToolCard";
 import { categories, tools } from "../data/tools";
-
-const FAVORITES_KEY = "dad-ai-toolbox-favorites";
-
-function normalize(value: string) {
-  return value
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
-}
+import { useFavorites } from "../hooks/useFavorites";
+import { filterTools } from "../lib/toolFilters";
 
 const guideSteps = [
   {
@@ -33,56 +27,38 @@ const guideSteps = [
 ];
 
 export default function Home() {
-  const [query, setQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("Tous");
-  const [favoriteIds, setFavoriteIds] = useState<string[]>(() => {
-    try {
-      const storedFavorites = window.localStorage.getItem(FAVORITES_KEY);
-      return storedFavorites ? JSON.parse(storedFavorites) : [];
-    } catch {
-      return [];
-    }
-  });
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { favoriteIds, toggleFavorite } = useFavorites();
+  const query = searchParams.get("q") ?? "";
+  const requestedCategory = searchParams.get("categorie") ?? "Tous";
+  const selectedCategory = categories.some((category) => category === requestedCategory)
+    ? requestedCategory
+    : "Tous";
+  const favoritesOnly = searchParams.get("favoris") === "1";
 
-  useEffect(() => {
-    window.localStorage.setItem(FAVORITES_KEY, JSON.stringify(favoriteIds));
-  }, [favoriteIds]);
+  const updateFilter = (key: "q" | "categorie" | "favoris", value: string) => {
+    const next = new URLSearchParams(searchParams);
+    if (!value || value === "Tous" || value === "0") {
+      next.delete(key);
+    } else {
+      next.set(key, value);
+    }
+    setSearchParams(next, { replace: true });
+  };
 
   const filteredTools = useMemo(() => {
-    const normalizedQuery = normalize(query.trim());
-
-    return tools.filter((tool) => {
-      const matchesCategory = selectedCategory === "Tous" || tool.category === selectedCategory;
-      const searchableContent = normalize(
-        [
-          tool.name,
-          tool.description,
-          tool.category,
-          tool.useCase,
-          tool.difficulty,
-          tool.bestFor.join(" "),
-          tool.starterPrompt,
-          tool.beginnerTip,
-        ].join(" "),
-      );
-      const matchesSearch = !normalizedQuery || searchableContent.includes(normalizedQuery);
-      return matchesCategory && matchesSearch;
+    return filterTools(tools, {
+      query,
+      category: selectedCategory,
+      favoritesOnly,
+      favoriteIds,
     });
-  }, [query, selectedCategory]);
+  }, [favoriteIds, favoritesOnly, query, selectedCategory]);
 
   const favoriteTools = tools.filter((tool) => favoriteIds.includes(tool.id));
 
-  const toggleFavorite = (toolId: string) => {
-    setFavoriteIds((currentFavorites) =>
-      currentFavorites.includes(toolId)
-        ? currentFavorites.filter((id) => id !== toolId)
-        : [...currentFavorites, toolId],
-    );
-  };
-
   const resetFilters = () => {
-    setQuery("");
-    setSelectedCategory("Tous");
+    setSearchParams({}, { replace: true });
   };
 
   return (
@@ -147,9 +123,30 @@ export default function Home() {
 
       <section className="mx-auto max-w-6xl px-5 pb-16">
         <div className="rounded-3xl bg-white/80 p-5 shadow-sm">
-          <SearchBar value={query} onSearch={setQuery} />
+          <SearchBar value={query} onSearch={(value) => updateFilter("q", value)} />
           <div className="mt-4">
-            <CategoryFilter categories={categories} selectedCategory={selectedCategory} onSelect={setSelectedCategory} />
+            <CategoryFilter
+              categories={categories}
+              selectedCategory={selectedCategory}
+              onSelect={(category) => updateFilter("categorie", category)}
+            />
+          </div>
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+            <p className="text-sm font-semibold text-slate-500">
+              La recherche et les filtres restent dans l’adresse pour pouvoir partager cette sélection.
+            </p>
+            <button
+              type="button"
+              onClick={() => updateFilter("favoris", favoritesOnly ? "0" : "1")}
+              aria-pressed={favoritesOnly}
+              className={
+                favoritesOnly
+                  ? "rounded-full bg-amber-600 px-4 py-2 font-bold text-white"
+                  : "rounded-full bg-amber-100 px-4 py-2 font-bold text-amber-800 hover:bg-amber-200"
+              }
+            >
+              {favoritesOnly ? "Voir tous les outils" : `Voir mes favoris (${favoriteIds.length})`}
+            </button>
           </div>
         </div>
 
@@ -170,9 +167,11 @@ export default function Home() {
         <div className="mt-8 flex items-center justify-between gap-4">
           <div>
             <h2 className="text-3xl font-black text-slate-950">Outils disponibles</h2>
-            <p className="mt-1 text-slate-600">{filteredTools.length} résultat(s) trouvé(s)</p>
+            <p className="mt-1 text-slate-600" aria-live="polite">
+              {filteredTools.length} résultat(s) trouvé(s)
+            </p>
           </div>
-          {(query || selectedCategory !== "Tous") && (
+          {(query || selectedCategory !== "Tous" || favoritesOnly) && (
             <button type="button" onClick={resetFilters} className="rounded-full bg-white px-4 py-2 font-bold text-slate-700 shadow-sm hover:bg-slate-50">
               Réinitialiser
             </button>
@@ -188,7 +187,18 @@ export default function Home() {
         ) : (
           <div className="mt-8 rounded-3xl bg-white p-8 text-center shadow-sm">
             <h3 className="text-2xl font-black text-slate-950">Aucun outil trouvé</h3>
-            <p className="mt-2 text-slate-600">Essaie un autre mot comme écrire, image, traduction ou présentation.</p>
+            <p className="mt-2 text-slate-600">
+              {favoritesOnly && favoriteIds.length === 0
+                ? "Garde d’abord un outil en favori, puis il apparaîtra ici."
+                : "Essaie un autre mot comme écrire, image, traduction ou présentation."}
+            </p>
+            <button
+              type="button"
+              onClick={resetFilters}
+              className="mt-5 rounded-full bg-slate-950 px-5 py-3 font-bold text-white hover:bg-amber-700"
+            >
+              Afficher tous les outils
+            </button>
           </div>
         )}
       </section>

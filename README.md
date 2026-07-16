@@ -36,12 +36,12 @@ The result is not a catalogue of everything. It is a small, deliberately curated
 |---|---|
 | Language | French-first interface and guidance |
 | Catalogue | 10 tools across 7 categories |
-| Discovery | Accent-insensitive full-text search and category filters |
-| Guidance | Expandable starter prompts, beginner tips, and cautions |
-| Favourites | Stored locally in the browser |
+| Discovery | Accent-insensitive search, category filters, and shareable filter URLs |
+| Guidance | Dedicated tool pages, expandable prompts, copy actions, tips, and cautions |
+| Favourites | Validated local storage with a focused view and cross-tab synchronization |
 | Safety | Simple privacy and verification guidance for first-time users |
 | Layout | Responsive card interface built for mobile and desktop |
-| Delivery | Client-side React application with automated lint and build checks |
+| Delivery | Client-side React application with automated lint, component tests, and build checks |
 
 ## Product decisions
 
@@ -55,11 +55,11 @@ The interface, examples, labels, and guidance are written for a French-speaking 
 
 ### No account required
 
-Favourites are stored with `localStorage`. The user gets a personal shortlist without creating an account or sending profile data to a server.
+Favourites are stored with `localStorage`. The user gets a personal shortlist without creating an account or sending profile data to a server. Stored values are validated, migrated from the original storage key, and synchronized across open tabs.
 
 ### Guidance inside the card
 
-Each card keeps the learning context close to the tool: what to try, how to begin, and what to verify before relying on the result.
+Each card keeps the learning context close to the tool: what to try, how to begin, and what to verify before relying on the result. Starter prompts can be copied directly, and every tool has a dedicated beginner-friendly detail page.
 
 ## How it works
 
@@ -79,9 +79,12 @@ The current version is entirely client-side. It does not use Node.js, Express, M
 
 - live search across names, descriptions, use cases, categories, prompts, and guidance;
 - category filtering with a reset state;
+- shareable URLs that preserve search, category, and favourite filters;
 - persistent favourites;
-- separate shortlist for saved tools;
+- a focused view and separate shortlist for saved tools;
 - expandable “how to begin” guidance;
+- dedicated detail pages for every tool;
+- one-click starter-prompt copying;
 - French and English capability labels;
 - free-versus-paid indicators;
 - no-results handling;
@@ -123,12 +126,19 @@ papa-ai-toolbox/
 │   │   ├── CategoryFilter.tsx
 │   │   ├── Footer.tsx
 │   │   ├── Navbar.tsx
+│   │   ├── PromptCopyButton.tsx
 │   │   ├── SearchBar.tsx
 │   │   └── ToolCard.tsx
 │   ├── data/tools.ts
+│   ├── hooks/useFavorites.ts
+│   ├── lib/toolFilters.ts
 │   ├── pages/Home.tsx
+│   ├── pages/NotFound.tsx
+│   ├── pages/ToolDetails.tsx
+│   ├── test/setup.ts
 │   ├── App.tsx
 │   └── index.css
+├── package-lock.json
 ├── package.json
 └── README.md
 ```
@@ -136,30 +146,43 @@ papa-ai-toolbox/
 | Part | Responsibility |
 |---|---|
 | `tools.ts` | Typed catalogue and beginner guidance |
-| `Home.tsx` | Search, filters, favourites, and page composition |
-| `ToolCard.tsx` | Tool details, starter guidance, and external navigation |
+| `Home.tsx` | Shareable search, filters, favourites, and page composition |
+| `ToolCard.tsx` | Tool summary, starter guidance, prompt copying, and navigation |
+| `ToolDetails.tsx` | Complete beginner guide and recovery for unknown tool URLs |
+| `useFavorites.ts` | Validated persistence, migration, toggling, and tab synchronization |
+| `toolFilters.ts` | Accent-insensitive search and composable filtering |
 | `SearchBar.tsx` | Controlled search input |
 | `CategoryFilter.tsx` | Horizontally scrollable category controls |
 
 ## Quality checks
 
-The GitHub Actions workflow runs on pushes and pull requests to `main` using Node.js 22. It installs dependencies, runs ESLint, and produces the Vite build.
+Run the complete local check:
+
+```bash
+npm run lint
+npm test
+npm run build
+```
+
+The test suite covers filtering, accent normalization, favourite persistence, prompt copying, shareable URL state, card interactions, and tool detail routes.
+
+The GitHub Actions workflow runs on pushes and pull requests to `main` using Node.js 22. It performs a reproducible `npm ci` install, then runs ESLint, 10 Vitest tests, TypeScript, and the Vite production build.
 
 ## Current scope and next work
 
-This is a focused frontend product rather than a full-stack platform. The catalogue is maintained in code, favourites belong to one browser, and there is no analytics or remote synchronisation.
+This is a focused frontend product rather than a full-stack platform. The catalogue is maintained in code, favourites belong to one browser, and there is no account system or remote synchronization.
 
 Useful next steps would be:
 
-- add lightweight component tests;
 - validate external links automatically;
 - make the catalogue easier to update without editing source code;
 - add optional sharing for a curated shortlist;
+- add end-to-end browser coverage;
 - document the product with real interface screenshots.
 
 ## Technology
 
-`React 19` · `TypeScript` · `Vite 7` · `Tailwind CSS 4` · `React Router` · `GitHub Actions`
+`React 19` · `TypeScript` · `Vite 7` · `Tailwind CSS 4` · `React Router` · `Vitest` · `Testing Library` · `GitHub Actions`
 
 ---
 
