@@ -3,8 +3,8 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/MerveilleDivine/my-dads-app/actions/workflows/build.yml">
-    <img src="https://github.com/MerveilleDivine/my-dads-app/actions/workflows/build.yml/badge.svg" alt="Build" />
+  <a href="https://github.com/MerveilleDivine/papa-ai-toolbox/actions/workflows/build.yml">
+    <img src="https://github.com/MerveilleDivine/papa-ai-toolbox/actions/workflows/build.yml/badge.svg" alt="Build" />
   </a>
 </p>
 
@@ -91,8 +91,8 @@ The current version is entirely client-side. It does not use Node.js, Express, M
 ## Run locally
 
 ```bash
-git clone https://github.com/MerveilleDivine/my-dads-app.git
-cd my-dads-app
+git clone https://github.com/MerveilleDivine/papa-ai-toolbox.git
+cd papa-ai-toolbox
 
 npm install
 npm run dev
@@ -115,7 +115,7 @@ npm run lint
 ## Repository map
 
 ```text
-my-dads-app/
+papa-ai-toolbox/
 ├── .github/workflows/build.yml
 ├── assets/readme-banner.svg
 ├── src/
